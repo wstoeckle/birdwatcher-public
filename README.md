@@ -11,7 +11,13 @@ birds visiting your yard, keeps a running life list of every species you've seen
 and lets visitors press a button to make the camera take a photo right now. It
 runs on free tiers and costs roughly **$0–2/month**.
 
-<!-- TODO: add 2-3 gallery screenshots here -->
+<p align="center">
+  <img src="docs/images/blue-jay.jpg" width="32%" alt="A blue jay perched at the feeder" />
+  <img src="docs/images/northern-cardinal.jpg" width="32%" alt="A northern cardinal on the mower beside the feeder" />
+  <img src="docs/images/cardinal-and-sparrow.jpg" width="32%" alt="A cardinal and a house sparrow sharing the frame" />
+</p>
+
+<p align="center"><sub><i>Real captures from a single backyard feeder — a blue jay, a cardinal, and a cardinal sharing the frame with a house sparrow. Each one spotted, cropped, and identified automatically.</i></sub></p>
 
 ## How it works
 
