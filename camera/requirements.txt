@@ -1,0 +1,15 @@
+# pip install -r requirements.txt
+#
+# NOTE: picamera2 is NOT installed via pip — it ships with Raspberry Pi OS or is
+# installed with `sudo apt install -y python3-picamera2`. Everything below works
+# both on the Pi and on a laptop for --test-image development.
+
+google-genai>=1.0.0
+pillow>=10.0.0
+numpy>=1.24.0
+requests>=2.31.0
+
+# Only needed for camera.source = "rtsp" (a network/IP camera like a Reolink).
+# Safe to skip if you use the Pi Camera Module. Install with:
+#   ./venv/bin/pip install opencv-python-headless
+# opencv-python-headless>=4.8.0

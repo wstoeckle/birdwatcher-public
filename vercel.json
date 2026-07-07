@@ -1,0 +1,9 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "vite",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "installCommand": "npm install",
+  "crons": [{ "path": "/api/archive", "schedule": "0 10 * * 0" }],
+  "rewrites": [{ "source": "/((?!api/).*)", "destination": "/index.html" }]
+}

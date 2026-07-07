@@ -1,0 +1,6 @@
+[Unit]
+Description=Network self-heal watchdog (bird-cam)
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/netwatch.sh

@@ -1,0 +1,1215 @@
+:root {
+  --bg: #f6f3ea;
+  --card: #ffffff;
+  --ink: #23311f;
+  --ink-soft: #5c6b54;
+  --accent: #2f6b3f;
+  --accent-warm: #c8541f;
+  --line: #e4ddcb;
+  --shadow: 0 6px 24px rgba(40, 50, 30, 0.1);
+  --radius: 18px;
+  --radius-sm: 10px;
+  font-family:
+    ui-rounded,
+    'SF Pro Rounded',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    system-ui,
+    sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+.app {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 16px 64px;
+}
+
+/* ── Header ──────────────────────────────────────────────────────────────── */
+.site-header {
+  text-align: center;
+  padding: 40px 12px 20px;
+}
+.site-title {
+  font-size: clamp(28px, 6vw, 44px);
+  margin: 0;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+}
+.site-subtitle {
+  margin: 8px 0 0;
+  color: var(--ink-soft);
+  font-size: 16px;
+}
+.seed-banner {
+  display: inline-block;
+  margin-top: 16px;
+  padding: 8px 14px;
+  background: #fff6e9;
+  border: 1px solid #f0d9b5;
+  color: #8a5a1e;
+  border-radius: 999px;
+  font-size: 13px;
+}
+
+/* ── Summary stats (totals at the top) ─────────────────────────────────────── */
+.statbar {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin: 0 0 8px;
+  padding: 0;
+}
+.statbar .stat {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 14px 24px;
+  min-width: 110px;
+  text-align: center;
+}
+.stat-value {
+  display: block;
+  font-size: clamp(26px, 5vw, 36px);
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--accent);
+}
+.stat-label {
+  display: block;
+  margin: 4px 0 0;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* ── Spend page ─────────────────────────────────────────────────────────────── */
+.spend-total {
+  text-align: center;
+  margin: 18px 0 0;
+  font-size: clamp(32px, 9vw, 52px);
+  font-weight: 800;
+  color: var(--accent-warm);
+  line-height: 1;
+}
+.spend-total-label {
+  display: block;
+  margin-top: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.spend-note {
+  max-width: 560px;
+  margin: 14px auto 0;
+  text-align: center;
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+/* ── Species checklist table ───────────────────────────────────────────────── */
+.species-table-wrap {
+  max-width: 560px;
+  margin: 36px auto 8px;
+}
+.species-table-title {
+  text-align: center;
+  font-size: 20px;
+  color: var(--accent);
+  margin: 0 0 14px;
+}
+.species-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.species-table th,
+.species-table td {
+  padding: 11px 18px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+.species-table thead th {
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  background: #fbf9f2;
+}
+.species-table tbody tr:last-child td {
+  border-bottom: none;
+}
+.species-table td {
+  color: var(--ink);
+}
+.species-table-num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  color: var(--accent);
+}
+.species-table thead .species-table-num {
+  color: var(--ink-soft);
+  font-weight: inherit;
+}
+
+/* Filter-mode table: rows double as the gallery filter. */
+.species-table.is-filter .species-row {
+  cursor: pointer;
+  transition: background 0.12s ease;
+}
+.species-table.is-filter .species-row:hover {
+  background: #fbf9f2;
+}
+.species-table.is-filter .species-row:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+.species-table.is-filter .species-row.is-selected {
+  background: #eaf3ea;
+}
+.species-table.is-filter .species-row.is-selected td {
+  font-weight: 600;
+}
+.species-row-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.species-row-thumb {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex: 0 0 auto;
+}
+.species-row-thumb-all {
+  background: #eef0e6;
+  border: 1px dashed var(--line);
+}
+
+/* Durable daily history, backed by count rollups rather than retained photos. */
+.activity-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.9fr);
+  gap: 18px;
+  align-items: start;
+  max-width: 900px;
+  margin: 30px auto 20px;
+}
+.daily-log {
+  min-width: 0;
+}
+.daily-log-list {
+  display: grid;
+  gap: 8px;
+}
+.daily-log-row {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: center;
+  padding: 12px 16px;
+  text-align: left;
+  font: inherit;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 2px 10px rgba(40, 50, 30, 0.05);
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    transform 0.1s ease;
+}
+.daily-log-row:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+.daily-log-row:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.daily-log-row.is-selected {
+  background: #eaf3ea;
+  border-color: #b8d2b9;
+}
+.daily-log-date {
+  display: block;
+  font-weight: 800;
+  color: var(--ink);
+}
+.daily-log-species {
+  display: block;
+  margin: 4px 0 0;
+  color: var(--ink-soft);
+  font-size: 13px;
+  line-height: 1.45;
+}
+.daily-log-total {
+  min-width: 48px;
+  text-align: right;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.activity-calendar {
+  min-width: 0;
+  padding: 14px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.calendar-head {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) 34px;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.calendar-head .species-table-title {
+  margin: 0;
+  font-size: 18px;
+}
+.calendar-nav {
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fbf9f2;
+  color: var(--accent);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+.calendar-nav:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.calendar-weekdays,
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 5px;
+}
+.calendar-weekdays {
+  margin-bottom: 6px;
+  color: var(--ink-soft);
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+}
+.calendar-day,
+.calendar-empty {
+  aspect-ratio: 1;
+  min-width: 0;
+  border-radius: 5px;
+}
+.calendar-day {
+  border: 1px solid rgba(47, 107, 63, 0.16);
+  color: var(--ink);
+  font: inherit;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+.calendar-day:hover {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+.calendar-day:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.calendar-day.is-selected {
+  box-shadow: 0 0 0 2px var(--accent);
+}
+.density-0 {
+  background: #f0ede3;
+}
+.density-1 {
+  background: #d9ead8;
+}
+.density-2 {
+  background: #abd4a9;
+}
+.density-3 {
+  background: #68ad70;
+  color: #10220f;
+}
+.density-4 {
+  background: #2f6b3f;
+  color: #ffffff;
+}
+
+@media (max-width: 760px) {
+  .activity-panel {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Camera filter, shared by the bird and critter galleries. */
+.camera-filter {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 18px auto 24px;
+}
+.camera-filter-btn {
+  min-height: 38px;
+  padding: 8px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 3px 12px rgba(40, 50, 30, 0.07);
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    transform 0.1s ease;
+}
+.camera-filter-btn span {
+  margin-left: 6px;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+.camera-filter-btn:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+.camera-filter-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.camera-filter-btn.is-selected {
+  background: #eaf3ea;
+  border-color: #b8d2b9;
+  color: var(--accent);
+}
+
+/* The critter summary teaser on the bird page. */
+.critters-teaser {
+  text-align: center;
+  margin: 48px 0 8px;
+}
+.critters-teaser-title {
+  margin: 0 0 14px;
+  font-size: 22px;
+  color: var(--accent-warm);
+}
+.critters-teaser .critters-link {
+  margin-top: 16px;
+}
+
+/* ── Pagination ─────────────────────────────────────────────────────────── */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 28px 0 4px;
+}
+.page-btn {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 8px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    transform 0.1s ease;
+}
+.page-btn:hover:not(:disabled) {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+.page-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.page-info {
+  font-size: 13px;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Gallery ────────────────────────────────────────────────────────────── */
+.archive-note {
+  max-width: 680px;
+  margin: 0 auto 18px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: #fbf9f2;
+  color: var(--ink-soft);
+  font-size: 14px;
+  line-height: 1.45;
+  text-align: center;
+}
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 18px;
+}
+.card {
+  display: block;
+  text-align: left;
+  padding: 0;
+  border: none;
+  background: var(--card);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease;
+}
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(40, 50, 30, 0.16);
+}
+.card-photo {
+  aspect-ratio: 4 / 3;
+  background: #e9e4d6;
+}
+.card-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.card-body {
+  padding: 14px 16px 18px;
+}
+.card-species {
+  margin: 0;
+  font-size: 18px;
+  color: var(--ink);
+}
+.card-sci {
+  margin: 2px 0 0;
+  font-style: italic;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+.card-when {
+  margin: 10px 0 0;
+  font-size: 13px;
+  color: var(--accent-warm);
+  font-weight: 600;
+}
+
+.empty {
+  text-align: center;
+  color: var(--ink-soft);
+  padding: 60px 0;
+}
+
+/* ── Modal ──────────────────────────────────────────────────────────────── */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 26, 16, 0.6);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 50;
+}
+.modal {
+  position: relative;
+  background: var(--card);
+  border-radius: var(--radius);
+  max-width: 560px;
+  width: 100%;
+  max-height: 92vh;
+  overflow: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+}
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+.modal-photo-wrap {
+  position: relative;
+  line-height: 0;
+  /* Clip the box's dimming shadow to the photo so the body text stays bright. */
+  overflow: hidden;
+}
+.modal-photo {
+  /* Natural aspect ratio (no crop) so the highlight box maps exactly to the photo. */
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.modal-box {
+  position: absolute;
+  border: 3px solid var(--accent-warm);
+  border-radius: 6px;
+  box-shadow:
+    0 0 0 9999px rgba(20, 26, 16, 0.45),
+    0 0 12px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+.modal-show-btn {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 999px;
+  background: rgba(20, 26, 16, 0.62);
+  color: #fff;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  backdrop-filter: blur(2px);
+}
+.modal-show-btn:hover {
+  background: var(--accent-warm);
+}
+/* Flip to the previous/next photo, overlaid on the image edges. */
+.modal-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease;
+}
+.modal-nav:hover {
+  background: var(--accent-warm);
+}
+.modal-nav-prev {
+  left: 12px;
+}
+.modal-nav-next {
+  right: 12px;
+}
+.modal-body {
+  padding: 20px 24px 28px;
+}
+.modal-species {
+  margin: 0;
+  font-size: 26px;
+  color: var(--accent);
+}
+.modal-sci {
+  margin: 2px 0 0;
+  font-style: italic;
+  color: var(--ink-soft);
+}
+.modal-when {
+  margin: 12px 0 0;
+  font-size: 14px;
+  color: var(--accent-warm);
+  font-weight: 600;
+}
+.modal-facts-title {
+  margin: 22px 0 8px;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-soft);
+}
+.modal-facts {
+  margin: 0;
+  padding-left: 20px;
+  line-height: 1.6;
+}
+.modal-facts li {
+  margin-bottom: 8px;
+}
+.modal-remove {
+  margin-top: 24px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--ink-soft);
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  opacity: 0.7;
+}
+.modal-remove:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+.modal-remove-panel {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.modal-remove-lead {
+  margin: 0 0 10px;
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+.modal-remove-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.modal-remove-pin {
+  flex: 1 1 120px;
+  padding: 9px 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  font-size: 16px;
+  letter-spacing: 0.12em;
+  font-family: inherit;
+  color: var(--ink);
+}
+.modal-remove-pin:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.modal-remove-go {
+  padding: 9px 16px;
+  border: none;
+  border-radius: 12px;
+  background: var(--accent-warm);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+}
+.modal-remove-go:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.modal-remove-cancel {
+  padding: 9px 12px;
+  border: none;
+  background: transparent;
+  color: var(--ink-soft);
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+.modal-remove-err {
+  margin: 10px 0 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-warm);
+}
+
+/* Admin controls (edit species / remove photo) share one quiet footer block. */
+.modal-admin {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+/* The wrapper owns the divider + spacing, so the inner panels/buttons don't add
+   their own top border or margin. */
+.modal-admin .modal-remove {
+  margin-top: 0;
+}
+.modal-admin .modal-remove-panel,
+.modal-admin .modal-edit-panel {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+.modal-edit {
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--accent);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.modal-edit:hover {
+  text-decoration: underline;
+}
+.modal-edit-note {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: var(--accent-warm);
+}
+.modal-edit-lead {
+  margin: 0 0 10px;
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+.modal-edit-species {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 9px 12px;
+  margin-bottom: 8px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  font-size: 16px;
+  font-family: inherit;
+  color: var(--ink);
+}
+.modal-edit-species:focus,
+.modal-edit-pin:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.modal-edit-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.modal-edit-pin {
+  flex: 1 1 120px;
+  padding: 9px 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  font-size: 16px;
+  letter-spacing: 0.12em;
+  font-family: inherit;
+  color: var(--ink);
+}
+.modal-edit-go {
+  padding: 9px 16px;
+  border: none;
+  border-radius: 12px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+}
+.modal-edit-go:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.modal-edit-cancel {
+  padding: 9px 12px;
+  border: none;
+  background: transparent;
+  color: var(--ink-soft);
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+.modal-edit-err {
+  margin: 10px 0 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-warm);
+}
+.modal-reference {
+  margin-top: 22px;
+}
+.modal-ref-img {
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  display: block;
+}
+.modal-ref-credit {
+  margin: 8px 0 0;
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+.modal-ref-credit a {
+  color: var(--accent);
+}
+
+/* ── Critter counter ────────────────────────────────────────────────────── */
+.critters {
+  margin: 44px 0 8px;
+  text-align: center;
+}
+.critters-title {
+  margin: 0;
+  font-size: 22px;
+  color: var(--accent-warm);
+}
+.critters-sub {
+  margin: 4px 0 18px;
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+.critters-empty {
+  color: var(--ink-soft);
+  font-size: 15px;
+}
+.critters-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+}
+.critter-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 110px;
+  padding: 16px 20px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.critter-emoji {
+  font-size: 30px;
+  line-height: 1;
+}
+.critter-count {
+  font-size: 34px;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  margin-top: 6px;
+}
+.critter-name {
+  font-size: 14px;
+  color: var(--ink-soft);
+  text-transform: capitalize;
+}
+
+/* ── "Take a photo now" button ──────────────────────────────────────────── */
+.card-photo {
+  position: relative;
+}
+.card-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 4px 10px;
+  background: rgba(35, 49, 31, 0.78);
+  color: #fff;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  backdrop-filter: blur(2px);
+}
+.capture-fab-stack,
+.capture-panel {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 40;
+}
+.capture-fab-stack {
+  display: grid;
+  gap: 8px;
+}
+.capture-fab,
+.capture-panel {
+  box-shadow: 0 10px 30px rgba(40, 50, 30, 0.28);
+}
+.capture-fab {
+  padding: 13px 20px;
+  border: none;
+  border-radius: 999px;
+  background: var(--accent-warm);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition:
+    transform 0.12s ease,
+    filter 0.12s ease;
+}
+.capture-fab:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+}
+.capture-panel {
+  width: min(300px, calc(100vw - 36px));
+  padding: 20px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+.capture-close {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  color: var(--ink-soft);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+.capture-lead {
+  margin: 0 0 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.capture-pin {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  font-size: 18px;
+  letter-spacing: 0.18em;
+  text-align: center;
+  font-family: inherit;
+  color: var(--ink);
+}
+.capture-pin:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.capture-send {
+  width: 100%;
+  margin-top: 10px;
+  padding: 11px 14px;
+  border: none;
+  border-radius: 12px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+}
+.capture-send:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.capture-msg {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--ink);
+}
+.capture-msg-err {
+  margin-top: 10px;
+  color: var(--accent-warm);
+  font-weight: 600;
+}
+
+/* ── Footer ─────────────────────────────────────────────────────────────── */
+/* ── Cross-page links (birds ⇄ critters) ──────────────────────────────────── */
+.critters-link-wrap {
+  text-align: center;
+  margin: 40px 0 8px;
+}
+.critters-link {
+  display: inline-block;
+  padding: 12px 22px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--accent-warm);
+  font-weight: 700;
+  font-size: 15px;
+  text-decoration: none;
+  box-shadow: var(--shadow);
+  transition: transform 0.12s ease;
+}
+.critters-link:hover {
+  transform: translateY(-2px);
+}
+.subpage-nav {
+  padding: 24px 4px 0;
+}
+.back-link {
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+}
+.back-link:hover {
+  text-decoration: underline;
+}
+.critters-gallery-title {
+  text-align: center;
+  margin: 36px 0 14px;
+  font-size: 20px;
+  color: var(--ink);
+}
+
+/* ── Sign-up form (/alerts) ───────────────────────────────────────────────── */
+.subscribe {
+  max-width: 460px;
+  margin: 0 auto;
+  padding: 8px 16px 64px;
+}
+.subscribe h1 {
+  color: var(--accent);
+  margin: 8px 0 6px;
+}
+.subscribe-lead {
+  color: var(--ink-soft);
+  margin: 0 0 20px;
+  line-height: 1.5;
+}
+.subscribe-label {
+  display: block;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+.subscribe-input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  font-size: 17px;
+  font-family: inherit;
+  color: var(--ink);
+}
+.subscribe-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.subscribe-check {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-top: 16px;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--ink);
+}
+.subscribe-check input {
+  margin-top: 3px;
+  flex: 0 0 auto;
+}
+.subscribe-consent {
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+.subscribe-consent a {
+  color: var(--accent);
+}
+.subscribe-btn {
+  width: 100%;
+  margin-top: 20px;
+  padding: 13px 16px;
+  border: none;
+  border-radius: 12px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+}
+.subscribe-btn:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.subscribe-msg-err {
+  margin-top: 14px;
+  color: var(--accent-warm);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* ── Footer ─────────────────────────────────────────────────────────────── */
+/* ── Legal pages (privacy / terms) ────────────────────────────────────────── */
+.legal {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 8px 4px 64px;
+  color: var(--ink);
+  line-height: 1.62;
+}
+.legal h1 {
+  color: var(--accent);
+  margin: 8px 0 2px;
+}
+.legal h2 {
+  color: var(--accent-warm);
+  font-size: 18px;
+  margin: 28px 0 6px;
+}
+.legal-meta {
+  color: var(--ink-soft);
+  font-size: 14px;
+  margin: 0 0 22px;
+}
+.legal a {
+  color: var(--accent);
+}
+.legal ul {
+  padding-left: 20px;
+}
+.legal li {
+  margin-bottom: 8px;
+}
+
+.site-footer {
+  text-align: center;
+  margin-top: 40px;
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+.footer-links {
+  margin-top: 6px;
+}
+.footer-links a {
+  color: var(--ink-soft);
+  text-decoration: none;
+}
+.footer-links a:hover {
+  text-decoration: underline;
+}

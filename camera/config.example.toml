@@ -1,0 +1,170 @@
+# Copy to config.toml and fill in. Secrets can also come from environment
+# variables (BIRDCAM_GEMINI_API_KEY, BIRDCAM_UPLOAD_URL, BIRDCAM_INGEST_TOKEN),
+# which override anything here — handy for the systemd service.
+
+[camera]
+# Global capture-loop settings. For one camera, you can keep the source fields in
+# this [camera] table. For multiple cameras, add [[cameras]] entries below; each
+# one gets its own device_name, source, focus/rotation, and motion threshold.
+device_name = "feeder-pi"
+# Where frames come from for a single-camera setup:
+#   "picamera2" — the Pi Camera Module over the CSI ribbon (the original setup).
+#   "rtsp"      — an off-the-shelf network camera (e.g. a Reolink). Weatherproof
+#                 and fixed-focus, so no lens/enclosure calibration. The camera
+#                 joins the Wi-Fi/LAN and the Pi pulls its stream (see rtsp_url).
+source = "picamera2"
+# For source = "rtsp": the camera's stream URL. Prefer setting rtsp_url_env to an
+# env var in birdcam.env, so the password isn't stored in config.toml. The legacy
+# single-camera default is BIRDCAM_RTSP_URL. Reolink's full-res "main" stream is
+# h264Preview_01_main (some newer H.265 models use h265Preview_01_main).
+# Example: rtsp://USER:PASSWORD@192.168.1.50:554/h264Preview_01_main
+rtsp_url = ""
+rtsp_url_env = "BIRDCAM_RTSP_URL"
+# Average pixel change (0–255) that counts as motion. Raise if wind/clouds
+# trigger it; lower if real birds get missed. 6 is a sane start.
+motion_threshold = 6.0
+# How motion is measured against motion_threshold:
+#   "frame"     — average change over the WHOLE frame. Best for a feeder, where
+#                 the subject is close and fills much of the image.
+#   "localized" — change in the busiest small tile. A small, distant animal in a
+#                 wide scene (e.g. a yard cam) barely moves a whole-frame average
+#                 but lights up its own tile, so this catches it WITHOUT lowering
+#                 motion_threshold (which would just invite frame-wide noise). A
+#                 frame-wide change like a passing cloud scores the same as
+#                 "frame", so it doesn't over-trigger. Same 0–255 scale, so the
+#                 threshold keeps its meaning.
+#   "auto"      — the default: "localized" for rtsp cameras, "frame" otherwise.
+motion_metric = "auto"
+# Don't run AI more often than this many seconds for motion-triggered shots. This
+# keeps windy empty scenes from burning through API calls every polling tick.
+# Birds tend to linger at a feeder, so a few minutes between captures loses little
+# while cutting API spend on gusty days; lower it if you want livelier posting.
+cooldown_seconds = 180
+# How often to sample a frame for motion, in seconds.
+poll_seconds = 0.5
+# Frames to grab in a burst on motion; the sharpest is kept.
+burst_frames = 5
+# How often (seconds) to check the website for a "take a photo now" button press.
+# The Pi sits behind your router and can't be reached directly, so it polls for
+# these. Set to 0 to disable the live-photo button.
+capture_poll_seconds = 10
+# Fixed-focus distance in DIOPTRES (= 1 / distance_in_metres). REQUIRED for any
+# camera shooting through an enclosure window: continuous autofocus hunts on the
+# glass right in front of the lens and comes back soft. Examples: 1.0 ≈ 1 m (3 ft),
+# 0.7 ≈ 1.5 m (5 ft), 0.5 ≈ 2 m (6.5 ft). Tune against a real shot at the feeder.
+# Leave 0 to use continuous autofocus (open-air, no window only).
+lens_position = 0.0
+# Rotate the saved photo by this many degrees, for a camera mounted sideways or
+# upside-down. One of 0, 90, 180, 270. Pick whichever makes birds look upright.
+rotation = 0
+# Saved-photo output. Keep uploads modest because the website shows these images
+# directly in the gallery grid.
+jpeg_max_width = 1600
+jpeg_quality = 85
+
+# Optional multi-camera setup. birdcam_multi.py uses this list instead of the
+# single source above. Every upload includes the entry's device_name, so the
+# gallery can distinguish which camera saw the animal.
+#
+# [[cameras]]
+# device_name = "feeder-pi"
+# source = "picamera2"
+# lens_position = 0.94
+# rotation = 270
+# motion_threshold = 9.0
+#
+# [[cameras]]
+# device_name = "yard-reolink"
+# source = "rtsp"
+# rtsp_url_env = "BIRDCAM_RTSP_URL"
+# rotation = 0
+# jpeg_max_width = 1600
+# jpeg_quality = 85
+# motion_threshold = 9.0
+# # rtsp cameras default to localized motion (small/distant subjects in a wide
+# # yard view), so the threshold above applies per-tile, not frame-wide. Set
+# # motion_metric = "frame" here to force the old whole-frame averaging.
+# motion_metric = "auto"
+
+[gemini]
+api_key = ""               # https://aistudio.google.com/apikey  (or set env var)
+model = "gemini-2.5-flash" # cheap first-pass screen; runs on every motion frame
+# Stronger model used for accurate detection + crop diagnosis. Pipeline: the cheap
+# `model` first DETECTS objects (empty frame -> nothing -> skip, no cost); on a hit
+# this model re-detects for a tight box, then identifies just the cropped subject.
+# Catches empty-frame hallucinations and most bird/critter mixups, and gives the
+# accurate "show me" box. Only runs on positives, so cost stays small. Set to ""
+# (or the same as `model`) to use the cheap model for everything.
+verify_model = "gemini-2.5-pro"
+# Only post identifications at least this confident (0–1).
+min_confidence = 0.6
+# Reject detector boxes below this fraction of the image. Small birds on the Pi
+# can be real, so the general floor stays low.
+min_detection_area = 0.006
+# Reolink IR night frames are noisy and have been hallucinating tiny branch/noise
+# boxes as animals. Require a larger, clearer subject before posting night shots.
+rtsp_night_min_detection_area = 0.08
+# Reject boxes spanning too much of the frame; those are usually wind-blurred
+# branches or decoder smear, not one localized animal.
+max_detection_span = 0.65
+# New/rare bird and critter species get an extra adversarial review of the
+# detected crop plus full frame before posting. This catches rare-label
+# hallucinations where the box is actually on bark/foliage, or a bird gets filed
+# as a deer/cat/squirrel.
+rare_species_min_count = 3
+rare_bird_min_confidence = 0.92
+rare_critter_min_confidence = 0.9
+# The camera asks the website for the top confirmed bird species at this feeder
+# and includes them as a soft prior in the crop-classification prompt. This helps
+# with lookalike feeder birds without hard-blocking a genuinely new species.
+species_prior_limit = 12
+species_prior_ttl_seconds = 21600
+# Admin species edits are also fed back into the prompt as before/after pairs
+# ("model said X, admin corrected to Y") so repeated local mistakes get checked.
+# Pairs corrected to "none" (admin deleted the post as a false detection) become
+# a "be extra skeptical about these labels" warning instead.
+correction_prior_limit = 8
+correction_prior_ttl_seconds = 21600
+# Optional eBird seasonal prior: species other birders have reported near the
+# feeder recently get added to the ID prompt, so migration and season inform the
+# guess (the camera's own history can't know a first-ever visitor is plausible).
+# This is a PRESENCE list — eBird's recent-observations API returns each species
+# once, so there is no frequency ranking; ebird_prior_limit is just a token cap
+# on the (alphabetized) list. On a coast, the radius sweeps in shorebirds too;
+# that's harmless (they inform the yard cam) but shrink ebird_dist_km if the
+# list crowds out songbirds. Free API key: https://ebird.org/api/keygen — set it
+# here or as the env var BIRDCAM_EBIRD_API_KEY in birdcam.env. Coordinates are
+# your feeder's location (e.g. lat 44.48, lng -73.21); 0/0 disables the prior.
+ebird_api_key = ""
+ebird_lat = 0.0
+ebird_lng = 0.0
+ebird_dist_km = 25
+ebird_days_back = 14
+ebird_prior_limit = 40
+ebird_prior_ttl_seconds = 21600
+# Identify up to this many animals in one frame. Each subject gets its own crop
+# and classification (two different birds = two posts with their own "show me"
+# boxes; several of the same species = one post with a flock note). Cost note:
+# each subject adds classify calls (plus a borderline re-look and a rare review
+# when those trigger), so a busy feeder spends more per capture than the old
+# single-subject pipeline — cooldown_seconds still caps captures per minute, and
+# /spend tracks the actual total. Defaults to 1 (the cheap single-subject envelope);
+# raise it (2–3) only if you want every animal in a crowded frame posted separately.
+max_subjects_per_frame = 1
+# Helps Gemini pick the right species. This is the feeder's real location.
+location_hint = "Anytown, Vermont, USA (wooded suburban backyard)"
+
+[website]
+# Your deployed site's ingest endpoint. Use the CANONICAL host (the www form
+# that the bare domain redirects to) — posting to the redirecting host makes
+# requests drop the Authorization header on the hop, causing a spurious 401.
+upload_url = "https://your-domain.example/api/sightings"
+ingest_token = ""          # must match BIRDCAM_INGEST_TOKEN on the website
+
+[monitoring]
+# Optional liveness "heartbeat". The camera pings this URL every few minutes;
+# if pings stop (power cut, wifi down, crash) you get alerted. Easiest setup:
+# create a free check at https://healthchecks.io, set its period a bit longer
+# than heartbeat_seconds, and paste its ping URL here. Leave blank to disable.
+heartbeat_url = ""         # or set env var BIRDCAM_HEARTBEAT_URL
+heartbeat_seconds = 300    # how often to ping (5 min)

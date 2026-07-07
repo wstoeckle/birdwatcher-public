@@ -1,0 +1,17 @@
+[Unit]
+Description=bird-cam capture service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/bird-cam
+# Secrets live here so they stay out of config.toml. chmod 600 this file.
+EnvironmentFile=/home/pi/bird-cam/birdcam.env
+ExecStart=/home/pi/bird-cam/venv/bin/python /home/pi/bird-cam/birdcam_multi.py
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

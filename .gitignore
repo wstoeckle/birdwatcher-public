@@ -1,0 +1,22 @@
+node_modules
+dist
+.next
+next-env.d.ts
+*.local
+.env
+.env.*
+__pycache__/
+*.pyc
+.DS_Store
+*.tsbuildinfo
+coverage
+.vercel
+
+# camera (Raspberry Pi): secrets + local artifacts — never commit
+camera/birdcam.env
+camera/config.toml
+camera/venv/
+camera/*.jpg
+
+# local agent settings
+.claude/
