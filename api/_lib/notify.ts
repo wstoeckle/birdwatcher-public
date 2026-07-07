@@ -13,7 +13,7 @@ import { db } from './db.js';
 const SID = process.env.TWILIO_ACCOUNT_SID;
 const TOKEN = process.env.TWILIO_AUTH_TOKEN;
 const FROM = process.env.TWILIO_FROM;
-// Public URL of the gallery, appended to alert texts (e.g. https://birds.example.com).
+// Public URL of the gallery, appended to alert texts (e.g. https://your-domain.example).
 const SITE_URL = (process.env.SITE_URL ?? '').trim().replace(/\/+$/, '');
 
 function numbers(envValue: string | undefined): string[] {

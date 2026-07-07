@@ -24,8 +24,8 @@ sharpest frame → ask Gemini what it is → post birds to the website.
 ## Software setup
 
 ```bash
-# On the Pi, with the repo (or just this pi/ folder) at /home/pi/bird-cam:
-cd /home/pi/bird-cam
+# On the Pi, from your clone of the repo:
+cd ~/birdwatcher-public/camera
 bash install.sh          # installs picamera2 + a venv with the Python deps
 ```
 

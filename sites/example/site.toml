@@ -2,6 +2,6 @@
 # Copy this folder, rename it after your household, and fill in your values.
 name          = "Example Backyard"
 device_name   = "feeder-pi"
-domain        = "birds.example.com"
+domain        = "your-domain.example"
 site_title    = "Backyard Bird Cam"
 location_hint = "Anytown, Vermont, USA (wooded suburban backyard)"

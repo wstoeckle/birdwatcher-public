@@ -13,7 +13,7 @@ the Pi — it's all done from your laptop ("headless").
 
 - [ ] **Website is live.** Confirm `https://your-domain.example` loads (sample birds are fine).
 - [ ] **Database + storage wired up.** In the Vercel project: add **Neon** (Postgres)
-      and a **Blob** store, run `migrations/0001_init.sql` against the database, and
+      and a **Blob** store, run the files in `migrations/` against the database (all nine, in order), and
       set **`BIRDCAM_INGEST_TOKEN`** to a long random string. See
       [`docs/GETTING_STARTED.md`](../docs/GETTING_STARTED.md) Part 1. *(Without
       this, test posts won't save or show up.)*
@@ -104,7 +104,7 @@ Run these on the Pi (over SSH):
 ```bash
 # Get the code
 sudo apt-get update && sudo apt-get install -y git
-git clone https://github.com/wstoeckle/birdwatcher-public.git
+git clone https://github.com/YOUR-USERNAME/birdwatcher-public.git   # your fork
 cd birdwatcher-public/camera
 
 # Install camera library + Python deps into a virtualenv
@@ -320,5 +320,5 @@ sudo systemctl restart birdcam
 | Hazy/washed-out photos | Add black foam around the lens to kill window reflections |
 | `401` on upload | `BIRDCAM_INGEST_TOKEN` on the Pi ≠ the one in Vercel, **or** `upload_url` points at the bare domain — use the canonical `www.` host (a redirect drops the auth header) |
 | Upload `400` / image error | Vercel **Blob** store not added, or `BLOB_READ_WRITE_TOKEN` missing |
-| Nothing shows on site | Neon not added, or `migrations/0001_init.sql` not run |
+| Nothing shows on site | Neon not added, or the `migrations/` files not run |
 | After editing config | `sudo systemctl restart birdcam` |
